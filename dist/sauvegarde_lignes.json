@@ -1,0 +1,39 @@
+{
+  "lignes": [
+    {
+      "id": 1,
+      "nom": "Ligne 1",
+      "couleur": "#e74c3c",
+      "compteur": 0,
+      "elapsed": 0.0
+    },
+    {
+      "id": 2,
+      "nom": "Ligne 2",
+      "couleur": "#3498db",
+      "compteur": 0,
+      "elapsed": 0.0
+    },
+    {
+      "id": 3,
+      "nom": "Ligne 3",
+      "couleur": "#2ecc71",
+      "compteur": 0,
+      "elapsed": 0.0
+    },
+    {
+      "id": 4,
+      "nom": "Ligne 4",
+      "couleur": "#f1c40f",
+      "compteur": 0,
+      "elapsed": 0.0
+    },
+    {
+      "id": 5,
+      "nom": "Ligne 5",
+      "couleur": "#9b59b6",
+      "compteur": 0,
+      "elapsed": 0.0
+    }
+  ]
+}
