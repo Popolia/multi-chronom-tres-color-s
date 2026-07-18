@@ -26,6 +26,7 @@ Application de bureau (Windows) pour gérer plusieurs lignes indépendantes, cha
 - **Thème sombre personnalisé** : interface et icône de fenêtre reprennent les couleurs du logo
 <img width="822" height="572" alt="image" src="https://github.com/user-attachments/assets/caa54140-b71b-4c17-9a02-1e6c76026b71" />
 
+<img width="391" height="356" alt="image" src="https://github.com/user-attachments/assets/ba541a32-3be5-457c-8b91-283353638ced" />
 
 
 ## Utilisation
