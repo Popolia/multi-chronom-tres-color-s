@@ -1,6 +1,6 @@
 # Multi-Chronomètres Colorés
 
-[![Télécharger](https://img.shields.io/badge/⬇️_T%C3%A9l%C3%A9charger-2ecc71?style=for-the-badge)](https://github.com/Popolia/multi-chronometres-colores/archive/refs/heads/main.zip)
+[![Télécharger](https://img.shields.io/badge/⬇️_T%C3%A9l%C3%A9charger-2ecc71?style=for-the-badge)](https://github.com/Popolia/multi-chronom-tres-color-s/archive/refs/heads/main.zip)
 
 Application de bureau (Windows) pour gérer plusieurs lignes indépendantes, chacune avec sa propre couleur, un compteur et un chronomètre. Pensée pour suivre plusieurs opérations, postes ou tâches en parallèle.
 
