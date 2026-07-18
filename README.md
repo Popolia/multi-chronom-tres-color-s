@@ -23,6 +23,7 @@ Application de bureau (Windows) pour gérer plusieurs lignes indépendantes, cha
 - **Suppression de ligne** (`✕`), avec confirmation
 - **Sauvegarde automatique** : toutes les données (noms, couleurs, compteurs, temps) sont enregistrées dans `sauvegarde_lignes.json`, à côté de l'exécutable, et rechargées automatiquement au démarrage
 - **Console masquée** : aucune fenêtre noire ne s'affiche au lancement
+- **Thème sombre personnalisé** : interface et icône de fenêtre reprennent les couleurs du logo
 
 ## Utilisation
 
@@ -38,13 +39,17 @@ Application de bureau (Windows) pour gérer plusieurs lignes indépendantes, cha
 ```
 multi-chronomètres-colorés/
 ├── assets/
-│   ├── logo.png                # Logo (utilisé dans ce README)
-│   └── logo.ico                # Icône pour l'exécutable Windows
-├── gestionnaire_lignes.exe     # Application (à distribuer)
-├── sauvegarde_lignes.json      # Généré automatiquement au 1er lancement
+│   ├── logo.png                # Logo (fenêtre + README)
+│   ├── logo.ico                # Icône de l'exécutable Windows
+│   └── logo.svg                # Source vectorielle du logo
+├── gestionnaire_lignes.exe     # Application (à distribuer, avec assets/ à côté)
 ├── gestionnaire_lignes.py      # Code source
+├── sauvegarde_lignes.json      # Généré automatiquement au 1er lancement
+├── build.ps1                   # Script de compilation tout-en-un
 └── README.md
 ```
+
+> ⚠️ L'exécutable a besoin du dossier `assets/` juste à côté de lui (pour l'icône de fenêtre au runtime). Ne distribue jamais `gestionnaire_lignes.exe` seul — copie tout le dossier, ou au minimum l'exe + `assets/`.
 
 ## Développement
 
@@ -58,16 +63,34 @@ python gestionnaire_lignes.py
 
 ### Compiler en exécutable Windows autonome
 
+**Méthode rapide — script tout-en-un**
+
 ```bash
 python -m venv venv
 venv\Scripts\activate
 pip install pyinstaller
-python -m PyInstaller --onefile --icon=assets/logo.ico gestionnaire_lignes.py
+Unblock-File .\build.ps1    # si le fichier vient d'être téléchargé
+.\build.ps1
 ```
+
+`build.ps1` nettoie les anciens fichiers de build, compile avec l'icône, et recopie automatiquement `assets/` à côté de l'exe final dans `dist/`.
+
+**Méthode manuelle**
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+pip install pyinstaller
+python -m PyInstaller --onefile --icon=assets\logo.ico gestionnaire_lignes.py
+```
+
+Avec cette méthode, pense à recréer `dist\assets\` et à y copier `logo.png` + `logo.ico` manuellement après la compilation.
 
 L'exécutable final se trouve dans le dossier `dist/`.
 
 > 💡 Si la compilation échoue avec une erreur de permission (`PermissionError` / `FileNotFoundError` sur le `.exe`), ajoute une exclusion pour le dossier du projet dans ton antivirus (Windows Defender : *Protection contre les virus et menaces > Gérer les paramètres > Exclusions*).
+
+> 💡 Si PowerShell refuse d'exécuter `build.ps1` (*"n'est pas signé numériquement"*), débloque-le une fois avec `Unblock-File .\build.ps1`, et si besoin autorise les scripts locaux avec `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`.
 
 ## Licence
 

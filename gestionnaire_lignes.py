@@ -10,7 +10,7 @@ Gestionnaire de lignes - multi-chronomètres colorés
 """
 
 import tkinter as tk
-from tkinter import ttk, colorchooser, messagebox
+from tkinter import colorchooser, messagebox
 import time
 import sys
 import ctypes
@@ -36,6 +36,17 @@ def dossier_appli():
 
 
 SAVE_PATH = os.path.join(dossier_appli(), "sauvegarde_lignes.json")
+ICON_PATH = os.path.join(dossier_appli(), "assets", "logo.png")
+
+# Palette reprise du logo
+BG_DARK = "#1e2327"
+BG_CARD = "#2b3238"
+BG_CARD_HOVER = "#333b42"
+TEXT_LIGHT = "#f4f6f7"
+TEXT_MUTED = "#9aa3ab"
+ACCENT_RED = "#e74c3c"
+ACCENT_BLUE = "#3498db"
+ACCENT_GREEN = "#2ecc71"
 
 
 class Ligne:
@@ -60,8 +71,11 @@ class Ligne:
         self.start_time = None
         self._after_job = None
 
-        self.frame = tk.Frame(parent_frame, bd=1, relief="solid", padx=8, pady=6)
-        self.frame.pack(fill="x", pady=4, padx=4)
+        self.frame = tk.Frame(
+            parent_frame, bg=BG_CARD, padx=12, pady=10,
+            highlightbackground=self.couleur, highlightthickness=2, bd=0
+        )
+        self.frame.pack(fill="x", pady=5, padx=6)
 
         self._build_ui()
         self._refresh_color()
@@ -71,44 +85,73 @@ class Ligne:
     def _build_ui(self):
         # Pastille couleur (cliquable pour changer)
         self.color_btn = tk.Button(
-            self.frame, width=3, height=1, relief="raised",
-            command=self.choisir_couleur
+            self.frame, width=3, height=1, relief="flat", bd=0,
+            cursor="hand2", command=self.choisir_couleur
         )
-        self.color_btn.grid(row=0, column=0, rowspan=2, padx=(0, 10))
+        self.color_btn.grid(row=0, column=0, rowspan=2, padx=(0, 12))
 
         self.nom_label = tk.Label(
-            self.frame, text=self.nom, font=("Segoe UI", 10, "bold"), cursor="hand2"
+            self.frame, text=self.nom, font=("Segoe UI", 11, "bold"),
+            bg=BG_CARD, fg=TEXT_LIGHT, cursor="hand2"
         )
         self.nom_label.grid(row=0, column=1, sticky="w")
         self.nom_label.bind("<Double-Button-1>", self.editer_nom)
 
         # Compteur
-        tk.Label(self.frame, text="Compteur :").grid(row=1, column=1, sticky="w")
-        self.compteur_label = tk.Label(self.frame, text=str(self.compteur), font=("Consolas", 11, "bold"), width=4)
+        tk.Label(
+            self.frame, text="Compteur :", bg=BG_CARD, fg=TEXT_MUTED, font=("Segoe UI", 9)
+        ).grid(row=1, column=1, sticky="w")
+        self.compteur_label = tk.Label(
+            self.frame, text=str(self.compteur), font=("Consolas", 12, "bold"),
+            bg=BG_CARD, fg=TEXT_LIGHT, width=4
+        )
         self.compteur_label.grid(row=1, column=2, sticky="w")
-        tk.Button(self.frame, text="-", width=2, command=self.decrementer).grid(row=1, column=3)
-        tk.Button(self.frame, text="+", width=2, command=self.incrementer).grid(row=1, column=4)
+        tk.Button(
+            self.frame, text="-", width=2, relief="flat", bd=0, cursor="hand2",
+            bg=BG_DARK, fg=TEXT_LIGHT, activebackground=ACCENT_RED, activeforeground=TEXT_LIGHT,
+            command=self.decrementer
+        ).grid(row=1, column=3, padx=2)
+        tk.Button(
+            self.frame, text="+", width=2, relief="flat", bd=0, cursor="hand2",
+            bg=BG_DARK, fg=TEXT_LIGHT, activebackground=ACCENT_GREEN, activeforeground=TEXT_LIGHT,
+            command=self.incrementer
+        ).grid(row=1, column=4, padx=2)
 
         # Chrono
-        self.time_label = tk.Label(self.frame, text="00:00:00", font=("Consolas", 16, "bold"), width=9)
-        self.time_label.grid(row=0, column=5, rowspan=2, padx=15)
-
-        self.play_btn = tk.Button(self.frame, text="Démarrer", width=10, command=self.toggle_play)
-        self.play_btn.grid(row=0, column=6, padx=4)
-
-        tk.Button(self.frame, text="Reset", width=8, command=self.demander_reset).grid(
-            row=1, column=6, padx=4
+        self.time_label = tk.Label(
+            self.frame, text="00:00:00", font=("Consolas", 18, "bold"),
+            bg=BG_CARD, fg=TEXT_LIGHT, width=9
         )
+        self.time_label.grid(row=0, column=5, rowspan=2, padx=18)
 
-        tk.Button(self.frame, text="✕", width=2, fg="red", command=self.supprimer).grid(
-            row=0, column=7, rowspan=2, padx=(15, 0)
+        self.play_btn = tk.Button(
+            self.frame, text="Démarrer", width=10, relief="flat", bd=0, cursor="hand2",
+            bg=ACCENT_GREEN, fg="white", activebackground="#27ae60", activeforeground="white",
+            command=self.toggle_play
         )
+        self.play_btn.grid(row=0, column=6, padx=4, pady=2)
+
+        tk.Button(
+            self.frame, text="Reset", width=8, relief="flat", bd=0, cursor="hand2",
+            bg=BG_DARK, fg=TEXT_LIGHT, activebackground=ACCENT_BLUE, activeforeground="white",
+            command=self.demander_reset
+        ).grid(row=1, column=6, padx=4, pady=2)
+
+        tk.Button(
+            self.frame, text="✕", width=2, relief="flat", bd=0, cursor="hand2",
+            bg=BG_CARD, fg=ACCENT_RED, activebackground=ACCENT_RED, activeforeground="white",
+            command=self.supprimer
+        ).grid(row=0, column=7, rowspan=2, padx=(18, 0))
 
     def _refresh_color(self):
         self.color_btn.config(bg=self.couleur, activebackground=self.couleur)
+        self.frame.config(highlightbackground=self.couleur, highlightcolor=self.couleur)
 
     def editer_nom(self, event=None):
-        entry = tk.Entry(self.frame, font=("Segoe UI", 10, "bold"), width=15)
+        entry = tk.Entry(
+            self.frame, font=("Segoe UI", 11, "bold"), width=15,
+            bg=BG_DARK, fg=TEXT_LIGHT, insertbackground=TEXT_LIGHT, relief="flat"
+        )
         entry.insert(0, self.nom)
         entry.select_range(0, "end")
         entry.grid(row=0, column=1, sticky="w")
@@ -154,7 +197,7 @@ class Ligne:
     def _start(self):
         self.running = True
         self.start_time = time.time()
-        self.play_btn.config(text="Pause")
+        self.play_btn.config(text="Pause", bg=ACCENT_RED, activebackground="#c0392b")
         self._tick()
 
     def _pause(self):
@@ -162,7 +205,7 @@ class Ligne:
         if self.start_time is not None:
             self.elapsed += time.time() - self.start_time
         self.start_time = None
-        self.play_btn.config(text="Démarrer")
+        self.play_btn.config(text="Démarrer", bg=ACCENT_GREEN, activebackground="#27ae60")
         if self._after_job is not None:
             self.frame.after_cancel(self._after_job)
             self._after_job = None
@@ -217,24 +260,39 @@ class Ligne:
 class App:
     def __init__(self, root):
         self.root = root
-        self.root.title("Gestionnaire de lignes - Multi-chronomètres")
-        self.root.geometry("780x520")
+        self.root.title("Multi-Chronomètres Colorés")
+        self.root.geometry("820x540")
+        self.root.configure(bg=BG_DARK)
+
+        # Icône de la fenêtre (remplace la plume tkinter par défaut)
+        if os.path.exists(ICON_PATH):
+            try:
+                self._icon_img = tk.PhotoImage(file=ICON_PATH)
+                self.root.iconphoto(True, self._icon_img)
+            except Exception:
+                pass
 
         # Barre du haut
-        top = tk.Frame(root, pady=8)
+        top = tk.Frame(root, bg=BG_DARK, pady=10)
         top.pack(fill="x")
         tk.Button(
             top, text="+ Ajouter une ligne", font=("Segoe UI", 10, "bold"),
-            command=self.ajouter_ligne, bg="#2ecc71", fg="white"
-        ).pack(side="left", padx=10)
+            relief="flat", bd=0, cursor="hand2",
+            command=self.ajouter_ligne, bg=ACCENT_GREEN, fg="white",
+            activebackground="#27ae60", activeforeground="white",
+            padx=10, pady=4
+        ).pack(side="left", padx=12)
 
         # Zone scrollable pour les lignes
-        container = tk.Frame(root)
-        container.pack(fill="both", expand=True, padx=4, pady=4)
+        container = tk.Frame(root, bg=BG_DARK)
+        container.pack(fill="both", expand=True, padx=6, pady=4)
 
-        canvas = tk.Canvas(container, highlightthickness=0)
-        scrollbar = ttk.Scrollbar(container, orient="vertical", command=canvas.yview)
-        self.lignes_frame = tk.Frame(canvas)
+        canvas = tk.Canvas(container, highlightthickness=0, bg=BG_DARK)
+        scrollbar = tk.Scrollbar(
+            container, orient="vertical", command=canvas.yview,
+            bg=BG_CARD, troughcolor=BG_DARK, activebackground=ACCENT_BLUE, bd=0
+        )
+        self.lignes_frame = tk.Frame(canvas, bg=BG_DARK)
 
         self.lignes_frame.bind(
             "<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
