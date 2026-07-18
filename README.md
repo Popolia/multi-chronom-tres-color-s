@@ -24,6 +24,9 @@ Application de bureau (Windows) pour gérer plusieurs lignes indépendantes, cha
 - **Sauvegarde automatique** : toutes les données (noms, couleurs, compteurs, temps) sont enregistrées dans `sauvegarde_lignes.json`, à côté de l'exécutable, et rechargées automatiquement au démarrage
 - **Console masquée** : aucune fenêtre noire ne s'affiche au lancement
 - **Thème sombre personnalisé** : interface et icône de fenêtre reprennent les couleurs du logo
+<img width="822" height="572" alt="image" src="https://github.com/user-attachments/assets/caa54140-b71b-4c17-9a02-1e6c76026b71" />
+
+
 
 ## Utilisation
 
